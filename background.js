@@ -28,12 +28,29 @@ class BackgroundService {
             }
         })
     }
+    static emitMessageToSocketService(socketInstance, params = {}) {
+        if (!_.isEmpty(socketInstance) && _.isFunction(socketInstance.emit)) {
+            console.log(params)
+            // socketInstance.emit('webviewEventCallback', params);
+        }
+    }
     linstenSocketEvent() {
         if (!_.isEmpty(this.socketInstance) && _.isFunction(this.socketInstance.on)) {
             this.socketInstance.on('webviewEvent', (msg) => {
                 console.log(`webviewEvent msg`, msg)
+                this.sendMessageToContentScript(msg, BackgroundService.emitMessageToSocketService)
             });
         }
+    }
+    sendMessageToContentScript(message, callback) {
+        const operateTabIndex = message.operateTabIndex ? message.operateTabIndex : 0
+        console.log(message)
+        chrome.tabs.query({ index: operateTabIndex }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, message, (response) => {
+                console.log(callback)
+                if (callback) callback(this.socketInstance, response)
+            });
+        });
     }
 }
 const app = new BackgroundService()
