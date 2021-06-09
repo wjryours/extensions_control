@@ -21,6 +21,8 @@
                 "<all_urls>"
             ],
             "js": [
+                "lib/js/jquery.min.js",
+                "lib/js/operate.js",
                 "content-script.js"
             ],
             "run_at": "document_start"

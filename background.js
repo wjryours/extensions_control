@@ -31,7 +31,7 @@ class BackgroundService {
     static emitMessageToSocketService(socketInstance, params = {}) {
         if (!_.isEmpty(socketInstance) && _.isFunction(socketInstance.emit)) {
             console.log(params)
-            // socketInstance.emit('webviewEventCallback', params);
+            socketInstance.emit('webviewEventCallback', params);
         }
     }
     linstenSocketEvent() {
